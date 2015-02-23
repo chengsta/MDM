@@ -17,7 +17,6 @@ public class PlayerMovement : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
 		Camera.main.GetComponent<LockController> ().players.Add (gameObject);
 	}
 	
@@ -33,7 +32,6 @@ public class PlayerMovement : MonoBehaviour {
 		if (IsGrounded() && reversed) {
 			reversed = false;
 			jumpSpeed = -jumpSpeed;
-			print ("change jump direction");
 		}
 		if (Input.GetButtonDown("Jump")) {
 			if (IsGrounded()) {
