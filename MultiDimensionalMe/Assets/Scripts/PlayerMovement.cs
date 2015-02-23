@@ -5,9 +5,8 @@ public class PlayerMovement : MonoBehaviour {
 	public float moveSpeed;
 	public float jumpSpeed;
 	public float jumpTime;
-	public float gravity = -40.0f;
-	private bool jumping = false;
-	public bool reversed;
+	bool jumping = false;
+	public float gravity;
 	IEnumerator Jump() {
 		yield return new WaitForSeconds (jumpTime);
 		jumping = false;
@@ -23,15 +22,12 @@ public class PlayerMovement : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetButtonDown("Cancel")) {
+			Physics.gravity = new Vector3(0, -40.0f, 0);
 			Application.LoadLevel(Application.loadedLevelName);
 		}
-
+		//gravity = Physics.gravity.y;
 		if (jumping) {
 			setVertSpeed(jumpSpeed);
-		}
-		if (IsGrounded() && reversed) {
-			reversed = false;
-			jumpSpeed = -jumpSpeed;
 		}
 		if (Input.GetButtonDown("Jump")) {
 			if (IsGrounded()) {
@@ -53,7 +49,7 @@ public class PlayerMovement : MonoBehaviour {
 			unlock_movement();
 		}
 		else if (coll.GetComponent<ReverseSwitch>()) {
-			reverse_gravity();
+			Camera.main.GetComponent<LockController> ().reverse_gravity();
 		}
 	}
 	
@@ -63,7 +59,6 @@ public class PlayerMovement : MonoBehaviour {
 			if (cube.IsGrounded())
 				return true;
 		}
-
 		return false;
 	}
 	
@@ -83,9 +78,11 @@ public class PlayerMovement : MonoBehaviour {
 		Camera.main.GetComponent<LockController> ().unlock_movement ();
 	}
 
-	void reverse_gravity() {
+	public void reverse_gravity() {
+		StopCoroutine("Jump");
 		gravity = -gravity;
-		reversed = true;
+		jumpSpeed = -jumpSpeed;
+		jumping = false;
 		Physics.gravity = new Vector3(0, gravity, 0);
 //		Quaternion newRotation;
 //		if (gravity > 0)

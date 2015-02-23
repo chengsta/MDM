@@ -50,5 +50,9 @@ public class LockController : MonoBehaviour {
 			cube.renderer.material = mat;
 		}
 	}
-	
+
+	public void reverse_gravity () {
+		players [0].GetComponent<PlayerMovement>().reverse_gravity();
+		players [1].GetComponent<PlayerMovement>().reverse_gravity();
+	}
 }

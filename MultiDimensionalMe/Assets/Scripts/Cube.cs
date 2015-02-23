@@ -27,7 +27,7 @@ public class Cube : MonoBehaviour {
 				return true;
 		}
 		else {
-			// print("on ground/reverse gravity");
+			//print("on ground/reverse gravity");
 			// print (Vector3.up + transform.position);
 			//print (Physics.Raycast(transform.position + width, transform.TransformDirection(Vector3.up), distToGround + 0.1f) ||
 			//	Physics.Raycast(transform.position - width, transform.TransformDirection(Vector3.up), distToGround + 0.1f));
