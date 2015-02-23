@@ -5,9 +5,9 @@ public class PlayerMovement : MonoBehaviour {
 	public float moveSpeed;
 	public float jumpSpeed;
 	public float jumpTime;
-
+	public float gravity = -40.0f;
 	private bool jumping = false;
-
+	public bool reversed;
 	IEnumerator Jump() {
 		yield return new WaitForSeconds (jumpTime);
 		jumping = false;
@@ -30,7 +30,11 @@ public class PlayerMovement : MonoBehaviour {
 		if (jumping) {
 			setVertSpeed(jumpSpeed);
 		}
-
+		if (IsGrounded() && reversed) {
+			reversed = false;
+			jumpSpeed = -jumpSpeed;
+			print ("change jump direction");
+		}
 		if (Input.GetButtonDown("Jump")) {
 			if (IsGrounded()) {
 				//rigidbody.AddForce(Vector3.up * jumpSpeed);
@@ -50,6 +54,9 @@ public class PlayerMovement : MonoBehaviour {
 		else if (coll.GetComponent<UnlockSwitch>()) {
 			unlock_movement();
 		}
+		else if (coll.GetComponent<ReverseSwitch>()) {
+			reverse_gravity();
+		}
 	}
 	
 	bool IsGrounded() {
@@ -63,11 +70,11 @@ public class PlayerMovement : MonoBehaviour {
 	}
 	
 	void setHorizSpeed(float x) {
-		rigidbody.velocity = new Vector3(x, rigidbody.velocity.y, rigidbody.velocity.z);
+		rigidbody.velocity = new Vector3(x, rigidbody.velocity.y, 0);
 	}
 	
 	void setVertSpeed(float y) {
-		rigidbody.velocity = new Vector3(rigidbody.velocity.x, y, rigidbody.velocity.z);
+		rigidbody.velocity = new Vector3(rigidbody.velocity.x, y, 0);
 	}
 
 	void lock_movement() {
@@ -78,5 +85,16 @@ public class PlayerMovement : MonoBehaviour {
 		Camera.main.GetComponent<LockController> ().unlock_movement ();
 	}
 
+	void reverse_gravity() {
+		gravity = -gravity;
+		reversed = true;
+		Physics.gravity = new Vector3(0, gravity, 0);
+//		Quaternion newRotation;
+//		if (gravity > 0)
+//			newRotation = Quaternion.Euler(0,180,0);
+//		else
+//			newRotation = Quaternion.Euler(0,0,0);
+		//transform.rotation = Quaternion.Lerp(transform.rotation, newRotation, Time.deltaTime);
+	}
 
 }
