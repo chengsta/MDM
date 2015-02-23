@@ -7,9 +7,14 @@ public class PlayerMovement : MonoBehaviour {
 	public float jumpTime;
 	bool jumping = false;
 	public float gravity;
+
+	private float timer;
 	IEnumerator Jump() {
-		yield return new WaitForSeconds (jumpTime);
-		jumping = false;
+		while (timer > 0) {
+			setVertSpeed(jumpSpeed);
+			timer -= Time.deltaTime;
+			yield return null;
+		}
 		setVertSpeed (jumpSpeed/4);
 	}
 
@@ -35,16 +40,12 @@ public class PlayerMovement : MonoBehaviour {
 			Application.LoadLevel(Application.loadedLevelName);
 		}
 		//gravity = Physics.gravity.y;
-		if (jumping) {
-			setVertSpeed(jumpSpeed);
-		}
+
 		if (Input.GetButtonDown("Jump")) {
 			if (IsGrounded()) {
 
-				print ("hello");
-
+				timer = jumpTime;
 				StartCoroutine("Jump");
-				jumping = true;
 				setVertSpeed(jumpSpeed);
 			}
 		}
