@@ -7,6 +7,7 @@ public class LockController : MonoBehaviour {
 	public Material unlockColor;
 	public List<GameObject> players;
 	private bool locked = false;
+	private float levelLength;
 
 	public void lock_movement() {
 		if (locked)
@@ -32,6 +33,8 @@ public class LockController : MonoBehaviour {
 
 	void Awake() {
 		players = new List<GameObject> ();
+		levelLength = transform.FindChild("RightEnd").position.x;
+
 	}
 
 	// Use this for initialization
@@ -54,5 +57,39 @@ public class LockController : MonoBehaviour {
 	public void reverse_gravity () {
 		players [0].GetComponent<PlayerMovement>().reverse_gravity();
 		players [1].GetComponent<PlayerMovement>().reverse_gravity();
+	}
+
+		void swapPositionHelp(Cube cube) {
+		Vector3 pos = cube.transform.position;
+		if (cube.transform.position.x < 0) {
+			pos.x += levelLength;
+			cube.transform.position = pos;
+		}
+		else {
+			pos.x -= levelLength;
+			cube.transform.position = pos;
+		}
+	}
+
+	public void swapPosition() {
+		print ("swaq");
+
+		Cube cube1;
+		Cube cube2;
+
+		if (locked) {
+			Cube[] cubes = players [0].GetComponentsInChildren<Cube> () as Cube[];
+			cube1 = cubes[0];
+			cube2 = cubes[1];
+		}
+		else {
+			cube1 = players [0].GetComponentInChildren<Cube> ();
+			cube2 = players [1].GetComponentInChildren<Cube> ();
+		}
+
+		swapPositionHelp(cube1);
+		swapPositionHelp(cube2);
+
+
 	}
 }

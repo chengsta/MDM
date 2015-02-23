@@ -13,6 +13,15 @@ public class PlayerMovement : MonoBehaviour {
 		setVertSpeed (jumpSpeed/4);
 	}
 
+	IEnumerator SwapCheck() {
+		while (true) {
+			if (Input.GetButtonDown("Action")) {
+				Camera.main.GetComponent<LockController>().swapPosition();
+				break;
+			}
+			yield return null;
+		}
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -31,7 +40,9 @@ public class PlayerMovement : MonoBehaviour {
 		}
 		if (Input.GetButtonDown("Jump")) {
 			if (IsGrounded()) {
-				//rigidbody.AddForce(Vector3.up * jumpSpeed);
+
+				print ("hello");
+
 				StartCoroutine("Jump");
 				jumping = true;
 				setVertSpeed(jumpSpeed);
@@ -50,6 +61,15 @@ public class PlayerMovement : MonoBehaviour {
 		}
 		else if (coll.GetComponent<ReverseSwitch>()) {
 			Camera.main.GetComponent<LockController> ().reverse_gravity();
+		}
+		else if (coll.GetComponent<SwapSwitch>()) {
+			StartCoroutine("SwapCheck");
+		}
+	}
+
+	void OnTriggerExit(Collider coll) {
+		if (coll.GetComponent<SwapSwitch>()) {
+			StopCoroutine("SwapCheck");
 		}
 	}
 	
