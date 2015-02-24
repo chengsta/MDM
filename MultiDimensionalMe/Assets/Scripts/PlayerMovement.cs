@@ -35,10 +35,18 @@ public class PlayerMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetButtonDown("Cancel")) {
+
+		//menu stuff, maybe move later
+		if (Input.GetButtonDown("Restart")) {
 			Physics.gravity = new Vector3(0, -40.0f, 0);
 			Application.LoadLevel(Application.loadedLevelName);
 		}
+
+		if (Input.GetButtonDown("Cancel")) {
+			Application.LoadLevel("Main_menu");
+		}
+
+
 		//gravity = Physics.gravity.y;
 
 		if (Input.GetButtonDown("Jump")) {
